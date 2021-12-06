@@ -110,17 +110,6 @@ public class Tweet {
 
     @Override
     public String toString() {
-        return "Tweet{" +
-                "id=" + id +
-                ", user='" + user + '\'' +
-                ", fullName='" + fullName + '\'' +
-                ", url='" + url + '\'' +
-                ", timeStamp=" + timeStamp +
-                ", replies=" + replies +
-                ", likes=" + likes +
-                ", retweets=" + retweets +
-                ", text='" + text + '\'' +
-                ", Sentiment=" + Sentiment +
-                '}';
+        return text;
     }
 }
