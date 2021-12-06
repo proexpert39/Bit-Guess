@@ -93,8 +93,9 @@ public class TagController implements Initializable {
     private ListView<Tweet> lvTweetText;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssX");
     private final static String COMMA_DELIMITER = ",";
-    private final static String FILE_PATH = Objects.requireNonNull(
+    private final static String ACTUAL_PATH = Objects.requireNonNull(
             TagController.class.getResource("turkish_tweets.csv")).getPath();
+    private final static String  FILE_PATH = ACTUAL_PATH.substring(1);
     ObservableList<Tweet> tweetObservableList = FXCollections.observableArrayList();
     ObservableList<Tweet> positiveTweetObservableList = FXCollections.observableArrayList();
     ObservableList<Tweet> negativeTweetObservableList = FXCollections.observableArrayList();
