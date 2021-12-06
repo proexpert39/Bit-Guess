@@ -1,6 +1,7 @@
 package com.example.bitguess.Models;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class Tweet {
 
@@ -8,14 +9,14 @@ public class Tweet {
     private String user;
     private String fullName;
     private String url;
-    private LocalDateTime timeStamp;
+    private ZonedDateTime timeStamp;
     private int replies;
     private int likes;
     private int retweets;
     private String text;
     private int Sentiment;
 
-    public Tweet(String id, String user, String fullName, String url, LocalDateTime timeStamp, int replies, int likes, int retweets, String text, int sentiment) {
+    public Tweet(String id, String user, String fullName, String url, ZonedDateTime timeStamp, int replies, int likes, int retweets, String text, int sentiment) {
         this.id = id;
         this.user = user;
         this.fullName = fullName;
@@ -60,11 +61,11 @@ public class Tweet {
         this.url = url;
     }
 
-    public LocalDateTime getTimeStamp() {
+    public ZonedDateTime getTimeStamp() {
         return timeStamp;
     }
 
-    public void setTimeStamp(LocalDateTime timeStamp) {
+    public void setTimeStamp(ZonedDateTime timeStamp) {
         this.timeStamp = timeStamp;
     }
 

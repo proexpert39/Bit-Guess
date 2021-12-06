@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -120,33 +121,33 @@ public class TagController implements Initializable {
             if (line.size() >= 10) {
                 switch (line.get(9)) {
                     case "1":
-                        positiveTweetObservableList.add(new Tweet(line.get(0),line.get(1),line.get(2),line.get(3),LocalDateTime.parse(line.get(4), formatter),
-                                Integer.parseInt(line.get(5)),Integer.parseInt(line.get(6)),Integer.parseInt(line.get(7)),
-                                line.get(8).replace("\"", ""),Integer.parseInt(line.get(9))));
+                        positiveTweetObservableList.add(new Tweet(line.get(0).replace("\"", ""),line.get(1).replace("\"", ""),line.get(2).replace("\"", ""),line.get(3).replace("\"", ""), ZonedDateTime.parse(line.get(4).replace("\"", ""), formatter),
+                                Integer.parseInt(line.get(5).replace("\"", "")),Integer.parseInt(line.get(6).replace("\"", "")),Integer.parseInt(line.get(7).replace("\"", "")),
+                                line.get(8).replace("\"", ""),Integer.parseInt(line.get(9).replace("\"", ""))));
                         break;
                     case"-1":
-                        negativeTweetObservableList.add(new Tweet(line.get(0),line.get(1),line.get(2),line.get(3),LocalDateTime.parse(line.get(4), formatter),
-                                Integer.parseInt(line.get(5)),Integer.parseInt(line.get(6)),Integer.parseInt(line.get(7)),
-                                line.get(8).replace("\"", ""),Integer.parseInt(line.get(9))));
+                        negativeTweetObservableList.add(new Tweet(line.get(0).replace("\"", ""),line.get(1).replace("\"", ""),line.get(2).replace("\"", ""),line.get(3).replace("\"", ""),ZonedDateTime.parse(line.get(4).replace("\"", ""), formatter),
+                                Integer.parseInt(line.get(5).replace("\"", "")),Integer.parseInt(line.get(6).replace("\"", "")),Integer.parseInt(line.get(7).replace("\"", "")),
+                                line.get(8).replace("\"", ""),Integer.parseInt(line.get(9).replace("\"", ""))));
                         break;
                     case "0":
-                        neutralTweetObservableList.add(new Tweet(line.get(0),line.get(1),line.get(2),line.get(3),LocalDateTime.parse(line.get(4), formatter),
-                                Integer.parseInt(line.get(5)),Integer.parseInt(line.get(6)),Integer.parseInt(line.get(7)),
-                                line.get(8).replace("\"", ""),Integer.parseInt(line.get(9))));
+                        neutralTweetObservableList.add(new Tweet(line.get(0).replace("\"", ""),line.get(1).replace("\"", ""),line.get(2).replace("\"", ""),line.get(3).replace("\"", ""),ZonedDateTime.parse(line.get(4).replace("\"", ""), formatter),
+                                Integer.parseInt(line.get(5).replace("\"", "")),Integer.parseInt(line.get(6).replace("\"", "")),Integer.parseInt(line.get(7).replace("\"", "")),
+                                line.get(8).replace("\"", ""),Integer.parseInt(line.get(9).replace("\"", ""))));
                         break;
                     case "2":
-                        irrelevantTweetObservableList.add(new Tweet(line.get(0),line.get(1),line.get(2),line.get(3),LocalDateTime.parse(line.get(4), formatter),
-                                Integer.parseInt(line.get(5)),Integer.parseInt(line.get(6)),Integer.parseInt(line.get(7)),
-                                line.get(8).replace("\"", ""),Integer.parseInt(line.get(9))));
+                        irrelevantTweetObservableList.add(new Tweet(line.get(0).replace("\"", ""),line.get(1).replace("\"", ""),line.get(2).replace("\"", ""),line.get(3).replace("\"", ""),ZonedDateTime.parse(line.get(4).replace("\"", ""), formatter),
+                                Integer.parseInt(line.get(5).replace("\"", "")),Integer.parseInt(line.get(6).replace("\"", "")),Integer.parseInt(line.get(7).replace("\"", "")),
+                                line.get(8).replace("\"", ""),Integer.parseInt(line.get(9).replace("\"", ""))));
                         break;
                     default:
-                        tweetObservableList.add(new Tweet(line.get(0),line.get(1),line.get(2),line.get(3),LocalDateTime.parse(line.get(4), formatter),
-                                Integer.parseInt(line.get(5)),Integer.parseInt(line.get(6)),Integer.parseInt(line.get(7)),
-                                line.get(8).replace("\"", ""),Integer.parseInt(line.get(9))));
+                        tweetObservableList.add(new Tweet(line.get(0).replace("\"", ""),line.get(1).replace("\"", ""),line.get(2).replace("\"", ""),line.get(3).replace("\"", ""),ZonedDateTime.parse(line.get(4).replace("\"", ""), formatter),
+                                Integer.parseInt(line.get(5).replace("\"", "")),Integer.parseInt(line.get(6).replace("\"", "")),Integer.parseInt(line.get(7).replace("\"", "")),
+                                line.get(8).replace("\"", ""),Integer.parseInt(line.get(9).replace("\"", ""))));
                         break;
                 }
             } else if (line.size() > 2) {
-                tweetObservableList.add(new Tweet(line.get(0),line.get(1),line.get(2),line.get(3),LocalDateTime.parse(line.get(4), formatter),
+                tweetObservableList.add(new Tweet(line.get(0),line.get(1),line.get(2),line.get(3),ZonedDateTime.parse(line.get(4), formatter),
                         Integer.parseInt(line.get(5)),Integer.parseInt(line.get(6)),Integer.parseInt(line.get(7)),
                         line.get(8).replace("\"", ""),3));
             }
@@ -313,7 +314,7 @@ public class TagController implements Initializable {
     }
 
     public void onActionBtnKaydet(ActionEvent actionEvent) {
-        File file = new File("/home/eyuppastirmaci/Workspace/MyProjects/Bit-Guess/src/main/resources/com/example/bitguess/turkish_tweets_guncel.csv");
+        File file = new File("./src/main/resources/com/example/bitguess/turkish_tweets_guncel.csv");
 
         try {
             FileWriter output = new FileWriter(file);
@@ -322,21 +323,21 @@ public class TagController implements Initializable {
             write.writeNext(header);
             for (Tweet tweet : tweetObservableList) {
                 String[] data = { String.valueOf(tweet.getId()), tweet.getId(), tweet.getFullName(), tweet.getUrl(),
-                        String.valueOf(tweet.getTimeStamp()), String.valueOf(tweet.getReplies()), String.valueOf(tweet.getLikes()),
+                        tweet.getTimeStamp().format(formatter), String.valueOf(tweet.getReplies()), String.valueOf(tweet.getLikes()),
                         String.valueOf(tweet.getRetweets()), String.valueOf(tweet.getText()), String.valueOf(tweet.getSentiment())
                 };
                 write.writeNext(data);
             }
             for (Tweet tweet : positiveTweetObservableList)  {
                 String[] data = { String.valueOf(tweet.getId()), tweet.getId(), tweet.getFullName(), tweet.getUrl(),
-                        String.valueOf(tweet.getTimeStamp()), String.valueOf(tweet.getReplies()), String.valueOf(tweet.getLikes()),
+                        tweet.getTimeStamp().format(formatter), String.valueOf(tweet.getReplies()), String.valueOf(tweet.getLikes()),
                         String.valueOf(tweet.getRetweets()), String.valueOf(tweet.getText()), String.valueOf(tweet.getSentiment())
                 };
                 write.writeNext(data);
             }
             for (Tweet tweet : negativeTweetObservableList)  {
                 String[] data = { String.valueOf(tweet.getId()), tweet.getId(), tweet.getFullName(), tweet.getUrl(),
-                        String.valueOf(tweet.getTimeStamp()), String.valueOf(tweet.getReplies()), String.valueOf(tweet.getLikes()),
+                        tweet.getTimeStamp().format(formatter), String.valueOf(tweet.getReplies()), String.valueOf(tweet.getLikes()),
                         String.valueOf(tweet.getRetweets()), String.valueOf(tweet.getText()), String.valueOf(tweet.getSentiment())
                 };
                 write.writeNext(data);
@@ -350,7 +351,7 @@ public class TagController implements Initializable {
             }
             for (Tweet tweet : irrelevantTweetObservableList)  {
                 String[] data = { String.valueOf(tweet.getId()), tweet.getId(), tweet.getFullName(), tweet.getUrl(),
-                        String.valueOf(tweet.getTimeStamp()), String.valueOf(tweet.getReplies()), String.valueOf(tweet.getLikes()),
+                        tweet.getTimeStamp().format(formatter), String.valueOf(tweet.getReplies()), String.valueOf(tweet.getLikes()),
                         String.valueOf(tweet.getRetweets()), String.valueOf(tweet.getText()), String.valueOf(tweet.getSentiment())
                 };
                 write.writeNext(data);
