@@ -110,7 +110,6 @@ public class TagController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        changeNotTaggedButtonDisables(true);
         try {
             readFile(FILE_PATH);
         } catch (IOException | CsvException ignore) {
@@ -192,10 +191,6 @@ public class TagController implements Initializable {
         for (Button button: buttons) {
             button.setDisable(isDisable);
         }
-    }
-
-    public void changeNotTaggedButtonDisables(Boolean isDisable) {
-
     }
 
     public void onActionChangeTagTweet(ActionEvent actionEvent) {
