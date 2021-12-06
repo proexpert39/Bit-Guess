@@ -344,7 +344,7 @@ public class TagController implements Initializable {
             }
             for (Tweet tweet : neutralTweetObservableList)  {
                 String[] data = { String.valueOf(tweet.getId()), tweet.getId(), tweet.getFullName(), tweet.getUrl(),
-                        String.valueOf(tweet.getTimeStamp()), String.valueOf(tweet.getReplies()), String.valueOf(tweet.getLikes()),
+                        tweet.getTimeStamp().format(formatter), String.valueOf(tweet.getReplies()), String.valueOf(tweet.getLikes()),
                         String.valueOf(tweet.getRetweets()), String.valueOf(tweet.getText()), String.valueOf(tweet.getSentiment())
                 };
                 write.writeNext(data);
