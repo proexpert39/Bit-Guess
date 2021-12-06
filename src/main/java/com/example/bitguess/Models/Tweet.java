@@ -14,9 +14,9 @@ public class Tweet {
     private int likes;
     private int retweets;
     private String text;
-    private int Sentiment;
+    private String Sentiment;
 
-    public Tweet(String id, String user, String fullName, String url, ZonedDateTime timeStamp, int replies, int likes, int retweets, String text, int sentiment) {
+    public Tweet(String id, String user, String fullName, String url, ZonedDateTime timeStamp, int replies, int likes, int retweets, String text, String sentiment) {
         this.id = id;
         this.user = user;
         this.fullName = fullName;
@@ -101,11 +101,11 @@ public class Tweet {
         this.text = text;
     }
 
-    public int getSentiment() {
+    public String getSentiment() {
         return Sentiment;
     }
 
-    public void setSentiment(int sentiment) {
+    public void setSentiment(String sentiment) {
         Sentiment = sentiment;
     }
 
