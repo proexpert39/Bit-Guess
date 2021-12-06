@@ -14,19 +14,35 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URL;
-
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.NumberFormat;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class TagController implements Initializable {
+    private final static String COMMA_DELIMITER = ",";
+    private final static String L_FILE_PATH = Objects.requireNonNull(
+            TagController.class.getResource("turkish_tweets.csv")).getPath();
+    private final static String W_FILE_PATH = L_FILE_PATH.substring(1);
+    private final static String OS = System.getProperty("os.name");
+    private final static String FILE_PATH = OS.startsWith("Win") ? W_FILE_PATH :
+            L_FILE_PATH;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssX");
+    //private final static String FILE_PATH = Objects.requireNonNull(
+    //        TagController.class.getResource("turkish_tweets.csv")).getPath();
+    ObservableList<Tweet> tweetObservableList = FXCollections.observableArrayList();
+    ObservableList<Tweet> positiveTweetObservableList = FXCollections.observableArrayList();
+    ObservableList<Tweet> negativeTweetObservableList = FXCollections.observableArrayList();
+    ObservableList<Tweet> neutralTweetObservableList = FXCollections.observableArrayList();
+    ObservableList<Tweet> irrelevantTweetObservableList = FXCollections.observableArrayList();
+    NumberFormat numberFormat = NumberFormat.getInstance(new Locale("tr_TR"));
     @FXML
     private Label lblNotTagCount;
     @FXML
@@ -91,16 +107,6 @@ public class TagController implements Initializable {
     private ListView<Tweet> lvIrrelevantTweets;
     @FXML
     private ListView<Tweet> lvTweetText;
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssX");
-    private final static String COMMA_DELIMITER = ",";
-    private final static String FILE_PATH = Objects.requireNonNull(
-            TagController.class.getResource("turkish_tweets.csv")).getPath();
-    ObservableList<Tweet> tweetObservableList = FXCollections.observableArrayList();
-    ObservableList<Tweet> positiveTweetObservableList = FXCollections.observableArrayList();
-    ObservableList<Tweet> negativeTweetObservableList = FXCollections.observableArrayList();
-    ObservableList<Tweet> neutralTweetObservableList = FXCollections.observableArrayList();
-    ObservableList<Tweet> irrelevantTweetObservableList = FXCollections.observableArrayList();
-    NumberFormat numberFormat = NumberFormat.getInstance(new Locale("tr_TR"));
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -123,35 +129,35 @@ public class TagController implements Initializable {
             if (line.size() >= 10) {
                 switch (line.get(9).replace("\"", "")) {
                     case "1":
-                        positiveTweetObservableList.add(new Tweet(line.get(0).replace("\"", ""),line.get(1).replace("\"", ""),line.get(2).replace("\"", ""),line.get(3).replace("\"", ""), ZonedDateTime.parse(line.get(4).replace("\"", ""), formatter),
-                                Integer.parseInt(line.get(5).replace("\"", "")),Integer.parseInt(line.get(6).replace("\"", "")),Integer.parseInt(line.get(7).replace("\"", "")),
-                                line.get(8).replace("\"", ""),line.get(9).replace("\"", "")));
+                        positiveTweetObservableList.add(new Tweet(line.get(0).replace("\"", ""), line.get(1).replace("\"", ""), line.get(2).replace("\"", ""), line.get(3).replace("\"", ""), ZonedDateTime.parse(line.get(4).replace("\"", ""), formatter),
+                                Integer.parseInt(line.get(5).replace("\"", "")), Integer.parseInt(line.get(6).replace("\"", "")), Integer.parseInt(line.get(7).replace("\"", "")),
+                                line.get(8).replace("\"", ""), line.get(9).replace("\"", "")));
                         break;
-                    case"-1":
-                        negativeTweetObservableList.add(new Tweet(line.get(0).replace("\"", ""),line.get(1).replace("\"", ""),line.get(2).replace("\"", ""),line.get(3).replace("\"", ""),ZonedDateTime.parse(line.get(4).replace("\"", ""), formatter),
-                                Integer.parseInt(line.get(5).replace("\"", "")),Integer.parseInt(line.get(6).replace("\"", "")),Integer.parseInt(line.get(7).replace("\"", "")),
-                                line.get(8).replace("\"", ""),line.get(9).replace("\"", "")));
+                    case "-1":
+                        negativeTweetObservableList.add(new Tweet(line.get(0).replace("\"", ""), line.get(1).replace("\"", ""), line.get(2).replace("\"", ""), line.get(3).replace("\"", ""), ZonedDateTime.parse(line.get(4).replace("\"", ""), formatter),
+                                Integer.parseInt(line.get(5).replace("\"", "")), Integer.parseInt(line.get(6).replace("\"", "")), Integer.parseInt(line.get(7).replace("\"", "")),
+                                line.get(8).replace("\"", ""), line.get(9).replace("\"", "")));
                         break;
                     case "0":
-                        neutralTweetObservableList.add(new Tweet(line.get(0).replace("\"", ""),line.get(1).replace("\"", ""),line.get(2).replace("\"", ""),line.get(3).replace("\"", ""),ZonedDateTime.parse(line.get(4).replace("\"", ""), formatter),
-                                Integer.parseInt(line.get(5).replace("\"", "")),Integer.parseInt(line.get(6).replace("\"", "")),Integer.parseInt(line.get(7).replace("\"", "")),
-                                line.get(8).replace("\"", ""),line.get(9).replace("\"", "")));
+                        neutralTweetObservableList.add(new Tweet(line.get(0).replace("\"", ""), line.get(1).replace("\"", ""), line.get(2).replace("\"", ""), line.get(3).replace("\"", ""), ZonedDateTime.parse(line.get(4).replace("\"", ""), formatter),
+                                Integer.parseInt(line.get(5).replace("\"", "")), Integer.parseInt(line.get(6).replace("\"", "")), Integer.parseInt(line.get(7).replace("\"", "")),
+                                line.get(8).replace("\"", ""), line.get(9).replace("\"", "")));
                         break;
                     case "2":
-                        irrelevantTweetObservableList.add(new Tweet(line.get(0).replace("\"", ""),line.get(1).replace("\"", ""),line.get(2).replace("\"", ""),line.get(3).replace("\"", ""),ZonedDateTime.parse(line.get(4).replace("\"", ""), formatter),
-                                Integer.parseInt(line.get(5).replace("\"", "")),Integer.parseInt(line.get(6).replace("\"", "")),Integer.parseInt(line.get(7).replace("\"", "")),
-                                line.get(8).replace("\"", ""),line.get(9).replace("\"", "")));
+                        irrelevantTweetObservableList.add(new Tweet(line.get(0).replace("\"", ""), line.get(1).replace("\"", ""), line.get(2).replace("\"", ""), line.get(3).replace("\"", ""), ZonedDateTime.parse(line.get(4).replace("\"", ""), formatter),
+                                Integer.parseInt(line.get(5).replace("\"", "")), Integer.parseInt(line.get(6).replace("\"", "")), Integer.parseInt(line.get(7).replace("\"", "")),
+                                line.get(8).replace("\"", ""), line.get(9).replace("\"", "")));
                         break;
                     default:
-                        tweetObservableList.add(new Tweet(line.get(0).replace("\"", ""),line.get(1).replace("\"", ""),line.get(2).replace("\"", ""),line.get(3).replace("\"", ""),ZonedDateTime.parse(line.get(4).replace("\"", ""), formatter),
-                                Integer.parseInt(line.get(5).replace("\"", "")),Integer.parseInt(line.get(6).replace("\"", "")),Integer.parseInt(line.get(7).replace("\"", "")),
-                                line.get(8).replace("\"", ""),line.get(9).replace("\"", "")));
+                        tweetObservableList.add(new Tweet(line.get(0).replace("\"", ""), line.get(1).replace("\"", ""), line.get(2).replace("\"", ""), line.get(3).replace("\"", ""), ZonedDateTime.parse(line.get(4).replace("\"", ""), formatter),
+                                Integer.parseInt(line.get(5).replace("\"", "")), Integer.parseInt(line.get(6).replace("\"", "")), Integer.parseInt(line.get(7).replace("\"", "")),
+                                line.get(8).replace("\"", ""), line.get(9).replace("\"", "")));
                         break;
                 }
             } else if (line.size() > 2) {
-                tweetObservableList.add(new Tweet(line.get(0),line.get(1),line.get(2),line.get(3),ZonedDateTime.parse(line.get(4), formatter),
-                        Integer.parseInt(line.get(5)),Integer.parseInt(line.get(6)),Integer.parseInt(line.get(7)),
-                        line.get(8).replace("\"", ""),""));
+                tweetObservableList.add(new Tweet(line.get(0), line.get(1), line.get(2), line.get(3), ZonedDateTime.parse(line.get(4), formatter),
+                        Integer.parseInt(line.get(5)), Integer.parseInt(line.get(6)), Integer.parseInt(line.get(7)),
+                        line.get(8).replace("\"", ""), ""));
             }
         }
 
@@ -215,18 +221,21 @@ public class TagController implements Initializable {
         btnPositiveIrrelevant.setDisable(isDisabled);
         btnPositiveEject.setDisable(isDisabled);
     }
+
     public void changeNegativeButtonDisables(Boolean isDisabled) {
         btnNegativePositive.setDisable(isDisabled);
         btnNegativeNeutral.setDisable(isDisabled);
         btnNegativeIrrelevant.setDisable(isDisabled);
         btnNegativeEject.setDisable(isDisabled);
     }
+
     public void changeNeutralButtonDisables(Boolean isDisabled) {
         btnNeutralPositive.setDisable(isDisabled);
         btnNeutralNegative.setDisable(isDisabled);
         btnNeutralIrrelevant.setDisable(isDisabled);
         btnNeutralEject.setDisable(isDisabled);
     }
+
     public void changeIrrelevantButtonDisables(Boolean isDisabled) {
         btnIrrelevantPositive.setDisable(isDisabled);
         btnIrrelevantNegative.setDisable(isDisabled);
@@ -239,64 +248,64 @@ public class TagController implements Initializable {
 
         switch (btn.getId()) {
             case "btnPositive":
-                changeTweetTag(tweetObservableList,positiveTweetObservableList,lvTweetText,lvPositiveTweets, "1");
+                changeTweetTag(tweetObservableList, positiveTweetObservableList, lvTweetText, lvPositiveTweets, "1");
                 break;
             case "btnNegative":
-                changeTweetTag(tweetObservableList,negativeTweetObservableList,lvTweetText,lvNegativeTweets, "-1");
+                changeTweetTag(tweetObservableList, negativeTweetObservableList, lvTweetText, lvNegativeTweets, "-1");
                 break;
             case "btnNeutral":
-                changeTweetTag(tweetObservableList,neutralTweetObservableList,lvTweetText,lvNeutralTweets, "0");
+                changeTweetTag(tweetObservableList, neutralTweetObservableList, lvTweetText, lvNeutralTweets, "0");
                 break;
             case "btnIrrelevant":
-                changeTweetTag(tweetObservableList,irrelevantTweetObservableList,lvTweetText,lvIrrelevantTweets, "2");
+                changeTweetTag(tweetObservableList, irrelevantTweetObservableList, lvTweetText, lvIrrelevantTweets, "2");
                 break;
             case "btnPositiveNegative":
-                changeTweetTag(positiveTweetObservableList,negativeTweetObservableList,lvPositiveTweets,lvNegativeTweets, "-1");
+                changeTweetTag(positiveTweetObservableList, negativeTweetObservableList, lvPositiveTweets, lvNegativeTweets, "-1");
                 break;
             case "btnPositiveNeutral":
-                changeTweetTag(positiveTweetObservableList,neutralTweetObservableList,lvPositiveTweets,lvNeutralTweets, "0");
+                changeTweetTag(positiveTweetObservableList, neutralTweetObservableList, lvPositiveTweets, lvNeutralTweets, "0");
                 break;
             case "btnPositiveIrrelevant":
-                changeTweetTag(positiveTweetObservableList,irrelevantTweetObservableList,lvPositiveTweets,lvIrrelevantTweets, "2");
+                changeTweetTag(positiveTweetObservableList, irrelevantTweetObservableList, lvPositiveTweets, lvIrrelevantTweets, "2");
                 break;
             case "btnPositiveEject":
-                changeTweetTag(positiveTweetObservableList,tweetObservableList,lvPositiveTweets,lvTweetText, "");
+                changeTweetTag(positiveTweetObservableList, tweetObservableList, lvPositiveTweets, lvTweetText, "");
                 break;
             case "btnNegativePositive":
-                changeTweetTag(negativeTweetObservableList,positiveTweetObservableList,lvNegativeTweets,lvPositiveTweets, "1");
+                changeTweetTag(negativeTweetObservableList, positiveTweetObservableList, lvNegativeTweets, lvPositiveTweets, "1");
                 break;
             case "btnNegativeNeutral":
-                changeTweetTag(negativeTweetObservableList,neutralTweetObservableList,lvNegativeTweets,lvNeutralTweets, "0");
+                changeTweetTag(negativeTweetObservableList, neutralTweetObservableList, lvNegativeTweets, lvNeutralTweets, "0");
                 break;
             case "btnNegativeIrrelevant":
-                changeTweetTag(negativeTweetObservableList,irrelevantTweetObservableList,lvNegativeTweets,lvIrrelevantTweets, "2");
+                changeTweetTag(negativeTweetObservableList, irrelevantTweetObservableList, lvNegativeTweets, lvIrrelevantTweets, "2");
                 break;
             case "btnNegativeEject":
-                changeTweetTag(negativeTweetObservableList,tweetObservableList,lvNegativeTweets,lvTweetText, "");
+                changeTweetTag(negativeTweetObservableList, tweetObservableList, lvNegativeTweets, lvTweetText, "");
                 break;
             case "btnNeutralPositive":
-                changeTweetTag(neutralTweetObservableList,positiveTweetObservableList,lvNeutralTweets,lvPositiveTweets, "1");
+                changeTweetTag(neutralTweetObservableList, positiveTweetObservableList, lvNeutralTweets, lvPositiveTweets, "1");
                 break;
             case "btnNeutralNegative":
-                changeTweetTag(neutralTweetObservableList,negativeTweetObservableList,lvNeutralTweets,lvNegativeTweets, "-1");
+                changeTweetTag(neutralTweetObservableList, negativeTweetObservableList, lvNeutralTweets, lvNegativeTweets, "-1");
                 break;
             case "btnNeutralIrrelevant":
-                changeTweetTag(neutralTweetObservableList,irrelevantTweetObservableList,lvNeutralTweets,lvIrrelevantTweets, "2");
+                changeTweetTag(neutralTweetObservableList, irrelevantTweetObservableList, lvNeutralTweets, lvIrrelevantTweets, "2");
                 break;
             case "btnNeutralEject":
-                changeTweetTag(neutralTweetObservableList,tweetObservableList,lvNeutralTweets,lvTweetText, "");
+                changeTweetTag(neutralTweetObservableList, tweetObservableList, lvNeutralTweets, lvTweetText, "");
                 break;
             case "btnIrrelevantPositive":
-                changeTweetTag(irrelevantTweetObservableList,positiveTweetObservableList,lvIrrelevantTweets,lvPositiveTweets, "1");
+                changeTweetTag(irrelevantTweetObservableList, positiveTweetObservableList, lvIrrelevantTweets, lvPositiveTweets, "1");
                 break;
             case "btnIrrelevantNegative":
-                changeTweetTag(irrelevantTweetObservableList,negativeTweetObservableList,lvIrrelevantTweets,lvNegativeTweets, "-1");
+                changeTweetTag(irrelevantTweetObservableList, negativeTweetObservableList, lvIrrelevantTweets, lvNegativeTweets, "-1");
                 break;
             case "btnIrrelevantNeutral":
-                changeTweetTag(irrelevantTweetObservableList,neutralTweetObservableList,lvIrrelevantTweets,lvNeutralTweets, "0");
+                changeTweetTag(irrelevantTweetObservableList, neutralTweetObservableList, lvIrrelevantTweets, lvNeutralTweets, "0");
                 break;
             case "btnIrrelevantEject":
-                changeTweetTag(irrelevantTweetObservableList,tweetObservableList,lvIrrelevantTweets,lvTweetText, "");
+                changeTweetTag(irrelevantTweetObservableList, tweetObservableList, lvIrrelevantTweets, lvTweetText, "");
                 break;
         }
 
@@ -312,7 +321,7 @@ public class TagController implements Initializable {
         addedTweetListView.setItems(addedTweetObservableList);
         removedTweetObservableList.remove(removedTweetListView.getSelectionModel().getSelectedIndex());
         removedTweetListView.setItems(removedTweetObservableList);
-        System.out.println(removedTweetObservableList.size());
+        //System.out.println(removedTweetObservableList.size());
     }
 
     public void onActionBtnKaydet(ActionEvent actionEvent) {
@@ -321,38 +330,38 @@ public class TagController implements Initializable {
         try {
             FileWriter output = new FileWriter(file);
             CSVWriter write = new CSVWriter(output);
-            String[] header = { "id", "user", "fullname", "url", "timestamp", "replies", "likes", "retweets", "text", "sentiment" };
+            String[] header = {"id", "user", "fullname", "url", "timestamp", "replies", "likes", "retweets", "text", "sentiment"};
             write.writeNext(header);
             for (Tweet tweet : tweetObservableList) {
-                String[] data = { String.valueOf(tweet.getId()), tweet.getId(), tweet.getFullName(), tweet.getUrl(),
+                String[] data = {String.valueOf(tweet.getId()), tweet.getId(), tweet.getFullName(), tweet.getUrl(),
                         tweet.getTimeStamp().format(formatter), String.valueOf(tweet.getReplies()), String.valueOf(tweet.getLikes()),
                         String.valueOf(tweet.getRetweets()), String.valueOf(tweet.getText()), ""
                 };
                 write.writeNext(data);
             }
-            for (Tweet tweet : positiveTweetObservableList)  {
-                String[] data = { String.valueOf(tweet.getId()), tweet.getId(), tweet.getFullName(), tweet.getUrl(),
+            for (Tweet tweet : positiveTweetObservableList) {
+                String[] data = {String.valueOf(tweet.getId()), tweet.getId(), tweet.getFullName(), tweet.getUrl(),
                         tweet.getTimeStamp().format(formatter), String.valueOf(tweet.getReplies()), String.valueOf(tweet.getLikes()),
                         String.valueOf(tweet.getRetweets()), String.valueOf(tweet.getText()), "1"
                 };
                 write.writeNext(data);
             }
-            for (Tweet tweet : negativeTweetObservableList)  {
-                String[] data = { String.valueOf(tweet.getId()), tweet.getId(), tweet.getFullName(), tweet.getUrl(),
+            for (Tweet tweet : negativeTweetObservableList) {
+                String[] data = {String.valueOf(tweet.getId()), tweet.getId(), tweet.getFullName(), tweet.getUrl(),
                         tweet.getTimeStamp().format(formatter), String.valueOf(tweet.getReplies()), String.valueOf(tweet.getLikes()),
                         String.valueOf(tweet.getRetweets()), String.valueOf(tweet.getText()), "-1"
                 };
                 write.writeNext(data);
             }
-            for (Tweet tweet : neutralTweetObservableList)  {
-                String[] data = { String.valueOf(tweet.getId()), tweet.getId(), tweet.getFullName(), tweet.getUrl(),
+            for (Tweet tweet : neutralTweetObservableList) {
+                String[] data = {String.valueOf(tweet.getId()), tweet.getId(), tweet.getFullName(), tweet.getUrl(),
                         tweet.getTimeStamp().format(formatter), String.valueOf(tweet.getReplies()), String.valueOf(tweet.getLikes()),
                         String.valueOf(tweet.getRetweets()), String.valueOf(tweet.getText()), "0"
                 };
                 write.writeNext(data);
             }
-            for (Tweet tweet : irrelevantTweetObservableList)  {
-                String[] data = { String.valueOf(tweet.getId()), tweet.getId(), tweet.getFullName(), tweet.getUrl(),
+            for (Tweet tweet : irrelevantTweetObservableList) {
+                String[] data = {String.valueOf(tweet.getId()), tweet.getId(), tweet.getFullName(), tweet.getUrl(),
                         tweet.getTimeStamp().format(formatter), String.valueOf(tweet.getReplies()), String.valueOf(tweet.getLikes()),
                         String.valueOf(tweet.getRetweets()), String.valueOf(tweet.getText()), "2"
                 };
@@ -366,7 +375,6 @@ public class TagController implements Initializable {
 
 
     }
-
 
 
 }
