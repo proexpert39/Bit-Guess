@@ -321,7 +321,7 @@ public class TagController implements Initializable {
         addedTweetListView.setItems(addedTweetObservableList);
         removedTweetObservableList.remove(removedTweetListView.getSelectionModel().getSelectedIndex());
         removedTweetListView.setItems(removedTweetObservableList);
-        //System.out.println(removedTweetObservableList.size());
+        
     }
 
     public void onActionBtnKaydet(ActionEvent actionEvent) {
