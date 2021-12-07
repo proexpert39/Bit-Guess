@@ -32,8 +32,12 @@ public class TagController implements Initializable {
     private final static String W_FILE_PATH = L_FILE_PATH.substring(1);
     private final static String OS = System.getProperty("os.name");
     private final static String FILE_PATH = OS.startsWith("Win") ? W_FILE_PATH : L_FILE_PATH;
-    private final static DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssX");
+    private final static DateTimeFormatter FORMATTER_WITH_SECOND = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssX");
+    private final static DateTimeFormatter FORMATTER_WITHOUT_SECOND = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mmX");
     private final static NumberFormat NUMBER_FORMAT = NumberFormat.getInstance(new Locale("tr_TR"));
+    private static final char DATE_TIME_HOUR_SEPARATOR = ':';
+
+    private static DateTimeFormatter formatter = FORMATTER_WITH_SECOND;
 
     ObservableList<Tweet> tweetObservableList = FXCollections.observableArrayList();
     ObservableList<Tweet> positiveTweetObservableList = FXCollections.observableArrayList();
@@ -122,6 +126,10 @@ public class TagController implements Initializable {
                 .map(line -> Arrays.asList(line.split(COMMA_DELIMITER)))
                 .skip(1)
                 .collect(Collectors.toList());
+
+        if (!(characterCountAtString(result.get(1).get(4), DATE_TIME_HOUR_SEPARATOR) == 2)) {
+            formatter = FORMATTER_WITHOUT_SECOND;
+        }
 
         for (List<String> line : result) {
             if (line.size() >= 10) {
@@ -301,7 +309,7 @@ public class TagController implements Initializable {
 
         tweetObservableList.add(new Tweet(line.get(0).replace("\"", ""), line.get(1).replace("\"", ""),
                 line.get(2).replace("\"", ""), line.get(3).replace("\"", ""),
-                ZonedDateTime.parse(line.get(4).replace("\"", ""), FORMATTER),
+                ZonedDateTime.parse(line.get(4).replace("\"", ""), formatter),
                 Integer.parseInt(line.get(5).replace("\"", "")),
                 Integer.parseInt(line.get(6).replace("\"", "")),
                 Integer.parseInt(line.get(7).replace("\"", "")),
@@ -311,11 +319,23 @@ public class TagController implements Initializable {
 
     public void writeDataLineToFile(CSVWriter csvWriter, ObservableList<Tweet> tweetObservableList, String sentiment) {
         for (Tweet tweet : tweetObservableList) {
+
+
             csvWriter.writeNext(new String[]{String.valueOf(tweet.getId()), tweet.getUser(), tweet.getFullName(), tweet.getUrl(),
-                    tweet.getTimeStamp().format(FORMATTER), String.valueOf(tweet.getReplies()), String.valueOf(tweet.getLikes()),
+                    tweet.getTimeStamp().format(formatter), String.valueOf(tweet.getReplies()), String.valueOf(tweet.getLikes()),
                     String.valueOf(tweet.getRetweets()), String.valueOf(tweet.getText()), sentiment
             });
         }
+    }
+
+    public int characterCountAtString(String word, char character) {
+        int count = 0;
+        for (int i = 0; i < word.length(); i++) {
+            if (word.charAt(i) == character) {
+                count++;
+            }
+        }
+        return count;
     }
 
 }
