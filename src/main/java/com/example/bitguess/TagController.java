@@ -1,7 +1,7 @@
 package com.example.bitguess;
 
+import com.example.bitguess.Files.CSVFile;
 import com.example.bitguess.Models.Tweet;
-import com.opencsv.CSVWriter;
 import com.opencsv.exceptions.CsvException;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -27,23 +27,24 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TagController implements Initializable {
-    private final static String COMMA_DELIMITER = ",";
-    private final static String L_FILE_PATH = Objects.requireNonNull(TagController.class.getResource("turkish_tweets.csv")).getPath();
-    private final static String W_FILE_PATH = L_FILE_PATH.substring(1);
-    private final static String OS = System.getProperty("os.name");
-    private final static String FILE_PATH = OS.startsWith("Win") ? W_FILE_PATH : L_FILE_PATH;
-    private final static DateTimeFormatter FORMATTER_WITH_SECOND = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssX");
-    private final static DateTimeFormatter FORMATTER_WITHOUT_SECOND = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mmX");
-    private final static NumberFormat NUMBER_FORMAT = NumberFormat.getInstance(new Locale("tr_TR"));
+    private static final String COMMA_DELIMITER = ",";
+    private static final String L_FILE_PATH = Objects.requireNonNull(TagController.class.getResource("turkish_tweets.csv")).getPath();
+    private static final String W_FILE_PATH = L_FILE_PATH.substring(1);
+    private static final String OS = System.getProperty("os.name");
+    private static final String FILE_PATH = OS.startsWith("Win") ? W_FILE_PATH : L_FILE_PATH;
+    private static final String SAVED_FILE_PATH = "./src/main/resources/com/example/bitguess/turkish_tweets.csv";
+    private static final DateTimeFormatter FORMATTER_WITH_SECOND = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssX");
+    private static final DateTimeFormatter FORMATTER_WITHOUT_SECOND = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mmX");
+    private static final NumberFormat NUMBER_FORMAT = NumberFormat.getInstance(new Locale("tr_TR"));
     private static final char DATE_TIME_HOUR_SEPARATOR = ':';
-
-    private static DateTimeFormatter formatter = FORMATTER_WITH_SECOND;
 
     ObservableList<Tweet> tweetObservableList = FXCollections.observableArrayList();
     ObservableList<Tweet> positiveTweetObservableList = FXCollections.observableArrayList();
     ObservableList<Tweet> negativeTweetObservableList = FXCollections.observableArrayList();
     ObservableList<Tweet> neutralTweetObservableList = FXCollections.observableArrayList();
     ObservableList<Tweet> irrelevantTweetObservableList = FXCollections.observableArrayList();
+
+    private static DateTimeFormatter formatter = FORMATTER_WITH_SECOND;
 
     @FXML
     private Label lblNotTagCount;
@@ -57,7 +58,7 @@ public class TagController implements Initializable {
     private Label lblIrrelevantCount;
 
     @FXML
-    private Button saveButton;
+    private Button btnSaveButton;
     @FXML
     private Button btnPositiveNegative;
     @FXML
@@ -99,7 +100,7 @@ public class TagController implements Initializable {
     @FXML
     private Button btnIrrelevant;
     @FXML
-    private Button extractToFilesButton;
+    private Button btnExtractToFiles;
 
     @FXML
     private ListView<Tweet> lvPositiveTweets;
@@ -112,6 +113,8 @@ public class TagController implements Initializable {
     @FXML
     private ListView<Tweet> lvTweetText;
 
+    private final CSVFile csvFile = new CSVFile();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -121,13 +124,10 @@ public class TagController implements Initializable {
     }
 
     public void readFile(String filePath) throws IOException, CsvException {
-        List<List<String>> result = Files.readAllLines(Paths.get(filePath))
-                .stream()
-                .map(line -> Arrays.asList(line.split(COMMA_DELIMITER)))
-                .skip(1)
-                .collect(Collectors.toList());
 
-        if (!(characterCountAtString(result.get(1).get(4), DATE_TIME_HOUR_SEPARATOR) == 2)) {
+        List<List<String>> result = csvFile.readCsvFile(filePath, COMMA_DELIMITER);
+
+        if (characterCountAtString(result.get(1).get(4), DATE_TIME_HOUR_SEPARATOR) != 2) {
             formatter = FORMATTER_WITHOUT_SECOND;
         }
 
@@ -282,20 +282,10 @@ public class TagController implements Initializable {
     }
 
     public void onActionBtnKaydet(ActionEvent actionEvent) {
-        File file = new File("./src/main/resources/com/example/bitguess/turkish_tweets.csv");
-        try {
-            FileWriter output = new FileWriter(file);
-            CSVWriter write = new CSVWriter(output);
-            write.writeNext(new String[]{"id", "user", "fullname", "url", "timestamp", "replies", "likes", "retweets", "text", "sentiment"});
-            writeDataLineToFile(write,tweetObservableList,"");
-            writeDataLineToFile(write,positiveTweetObservableList,"1");
-            writeDataLineToFile(write,negativeTweetObservableList,"-1");
-            writeDataLineToFile(write,neutralTweetObservableList,"0");
-            writeDataLineToFile(write,irrelevantTweetObservableList,"2");
-            write.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        csvFile.writeCsvFile( SAVED_FILE_PATH,
+                new String[]{"id", "user", "fullname", "url", "timestamp", "replies", "likes", "retweets", "text", "sentiment"},
+                formatter,tweetObservableList,positiveTweetObservableList,negativeTweetObservableList,neutralTweetObservableList,
+                irrelevantTweetObservableList);
     }
 
     public void addTweetList(List<Tweet> tweetObservableList, List<String> line) {
@@ -315,17 +305,6 @@ public class TagController implements Initializable {
                 Integer.parseInt(line.get(7).replace("\"", "")),
                 line.get(8).replace("\"", ""), sentiment)
         );
-    }
-
-    public void writeDataLineToFile(CSVWriter csvWriter, ObservableList<Tweet> tweetObservableList, String sentiment) {
-        for (Tweet tweet : tweetObservableList) {
-
-
-            csvWriter.writeNext(new String[]{String.valueOf(tweet.getId()), tweet.getUser(), tweet.getFullName(), tweet.getUrl(),
-                    tweet.getTimeStamp().format(formatter), String.valueOf(tweet.getReplies()), String.valueOf(tweet.getLikes()),
-                    String.valueOf(tweet.getRetweets()), String.valueOf(tweet.getText()), sentiment
-            });
-        }
     }
 
     public int characterCountAtString(String word, char character) {
