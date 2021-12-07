@@ -27,7 +27,7 @@
                     <Insets left="8" />
                 </VBox.margin>
             </Label>
-            <ListView prefWidth="1400.0" fx:id="lvTweetText" />
+            <ListView prefWidth="1425.0" fx:id="lvTweetText" />
         </VBox>
         <VBox prefWidth="200.0" spacing="32" alignment="CENTER">
             <HBox.margin>
@@ -39,7 +39,7 @@
             <Button fx:id="btnIrrelevant" onAction="#onActionChangeTagTweet" prefWidth="200" prefHeight="60" text="ALakasız" />
         </VBox>
     </HBox>
-    <HBox spacing="16">
+    <HBox alignment="CENTER" spacing="16">
         <VBox spacing="8" alignment="CENTER">
             <HBox alignment="CENTER">
                 <Label prefWidth="330" style="-fx-font-weight: bold;" text="Pozitif">
