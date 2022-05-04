@@ -6,15 +6,15 @@ import csv
 
 translator = Translator()
 # open the file in the write mode
-f = open('tweets_turkish/bitcoin_tweets_0.csv', 'a',newline="",encoding="utf-8")
+f = open('tweets_turkish/bitcoin_tweets_2.csv', 'a',newline="")
 writer = csv.writer(f)
 header = ["date","text"]
 writer.writerow(header)
 
 
 column_names = ["date","text"]
-with open("tweets/bitcoin_tweets_0.csv", "r",encoding="utf-8") as csvfile:
-    df = read_csv(csvfile,encoding="utf-8",engine='c',usecols=column_names,low_memory=False,sep=",",)
+with open("tweets/bitcoin_tweets_2.csv", "r",encoding="utf-8") as csvfile:
+    df = read_csv(csvfile,encoding="utf-8",engine='python',usecols=column_names,sep=",",quoting=3)
     for index, row in df.iterrows():
         try:
             if( type(row.text) == str):
