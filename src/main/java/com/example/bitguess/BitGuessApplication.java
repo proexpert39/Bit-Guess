@@ -38,8 +38,6 @@ public class BitGuessApplication extends Application {
 
         }
 
-
-
         FXMLLoader fxmlLoader = new FXMLLoader(BitGuessApplication.class.getResource("tag-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), java.awt.Toolkit.getDefaultToolkit().getScreenSize().width,
                 Toolkit.getDefaultToolkit().getScreenSize().height);

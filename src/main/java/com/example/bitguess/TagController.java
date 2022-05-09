@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -28,7 +29,7 @@ import java.util.*;
 
 public class TagController implements Initializable {
     private static final String COMMA_DELIMITER = ",";
-    private static final String SAVED_FILE_PATH = "./src/main/resources/com/example/bitguess/tweets.csv";
+    private static final String SAVED_FILE_PATH = Global.FILE_PATH;
     private static final NumberFormat NUMBER_FORMAT = NumberFormat.getInstance(new Locale("tr_TR"));
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
@@ -40,7 +41,7 @@ public class TagController implements Initializable {
     ObservableList<Tweet> irrelevantTweetObservableList = FXCollections.observableArrayList();
 
     @FXML
-    private VBox root;
+    private AnchorPane root;
 
     @FXML
     private Label lblUntaggedCount;
@@ -48,6 +49,8 @@ public class TagController implements Initializable {
     private Label lblPositiveCount;
     @FXML
     private Label lblNegativeCount;
+    @FXML
+    private Label lblSelectedFilePath;
 
     @FXML
     private Label lblIrrelevantCount;
@@ -94,6 +97,8 @@ public class TagController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        lblSelectedFilePath.setText(String.format("Seçilen Dosya: %s", Global.FILE_PATH));
+
         readFile(Global.FILE_PATH);
     }
 
@@ -131,28 +136,31 @@ public class TagController implements Initializable {
         }
 
         updateTagCountLabels();
-
-        listViewAddListener(lvTweetText, btnPositive, btnNegative, btnIrrelevant);
-        listViewAddListener(lvNegativeTweets, btnNegativePositive, btnNegativeIrrelevant, btnNegativeEject);
-        lvIrrelevantTweets.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tweet>() {
+        lvPositiveTweets.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tweet>() {
             @Override
             public void changed(ObservableValue<? extends Tweet> observableValue, Tweet tweet, Tweet t1) {
-                changeButtonDisables(new Button[]{btnIrrelevantPositive, btnIrrelevantNegative, btnIrrelevantEject}, false);
+                changeButtonDisables(new Button[]{btnPositiveNegative, btnPositiveIrrelevant, btnPositiveEject}, false);
             }
         });
-        lvTweetText.setItems(tweetObservableList);
-        lvPositiveTweets.setItems(positiveTweetObservableList);
-        lvNegativeTweets.setItems(negativeTweetObservableList);
-        lvIrrelevantTweets.setItems(irrelevantTweetObservableList);
-    }
-
-    private void listViewAddListener(ListView<Tweet> lvNegativeTweets, Button btnNegativePositive, Button btnNegativeIrrelevant, Button btnNegativeEject) {
         lvNegativeTweets.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tweet>() {
             @Override
             public void changed(ObservableValue<? extends Tweet> observableValue, Tweet tweet, Tweet t1) {
                 changeButtonDisables(new Button[]{btnNegativePositive, btnNegativeIrrelevant, btnNegativeEject}, false);
             }
         });
+        lvIrrelevantTweets.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tweet>() {
+            @Override
+            public void changed(ObservableValue<? extends Tweet> observableValue, Tweet tweet, Tweet t1) {
+                changeButtonDisables(new Button[]{btnIrrelevantPositive, btnIrrelevantNegative, btnIrrelevantEject}, false);
+            }
+        });
+
+        lvTweetText.setItems(tweetObservableList);
+        lvPositiveTweets.setItems(positiveTweetObservableList);
+        lvNegativeTweets.setItems(negativeTweetObservableList);
+        lvIrrelevantTweets.setItems(irrelevantTweetObservableList);
+
+        System.out.println("HERE");
     }
 
     private void updateTagCountLabels() {
@@ -211,6 +219,11 @@ public class TagController implements Initializable {
         }
 
         updateTagCountLabels();
+
+        csvFile.writeCsvFile(SAVED_FILE_PATH,
+                new String[]{"date", "text", "sentiment"},
+                formatter, tweetObservableList, positiveTweetObservableList, negativeTweetObservableList,
+                irrelevantTweetObservableList);
     }
 
     public void changeTweetTag(ObservableList<Tweet> removedTweetObservableList, ObservableList<Tweet> addedTweetObservableList,
@@ -223,12 +236,7 @@ public class TagController implements Initializable {
         removedTweetListView.setItems(removedTweetObservableList);
     }
 
-    public void onActionBtnKaydet(ActionEvent actionEvent) {
-        csvFile.writeCsvFile(SAVED_FILE_PATH,
-                new String[]{"date", "text", "sentiment"},
-                formatter, tweetObservableList, positiveTweetObservableList, negativeTweetObservableList,
-                irrelevantTweetObservableList);
-    }
+
 
     public void addTweetList(List<Tweet> tweetObservableList, List<String> line) {
         String sentiment = "";
