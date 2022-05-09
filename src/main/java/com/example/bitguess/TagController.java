@@ -12,7 +12,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
@@ -24,15 +28,10 @@ import java.util.*;
 
 public class TagController implements Initializable {
     private static final String COMMA_DELIMITER = ",";
-    private static final String L_FILE_PATH = Objects.requireNonNull(TagController.class.getResource("tweets.csv")).getPath();
-    private static final String W_FILE_PATH = L_FILE_PATH.substring(1);
-    private static final String OS = System.getProperty("os.name");
-    private static final String FILE_PATH = OS.startsWith("Win") ? W_FILE_PATH : L_FILE_PATH;
     private static final String SAVED_FILE_PATH = "./src/main/resources/com/example/bitguess/tweets.csv";
     private static final NumberFormat NUMBER_FORMAT = NumberFormat.getInstance(new Locale("tr_TR"));
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
-    private static final DateTimeFormatter localizedDateSeparator = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM);;
 
     ObservableList<Tweet> tweetObservableList = FXCollections.observableArrayList();
     ObservableList<Tweet> positiveTweetObservableList = FXCollections.observableArrayList();
@@ -40,6 +39,8 @@ public class TagController implements Initializable {
 
     ObservableList<Tweet> irrelevantTweetObservableList = FXCollections.observableArrayList();
 
+    @FXML
+    private VBox root;
 
     @FXML
     private Label lblUntaggedCount;
@@ -93,7 +94,7 @@ public class TagController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        readFile(FILE_PATH);
+        readFile(Global.FILE_PATH);
     }
 
     public void readFile(String filePath) {
@@ -102,7 +103,7 @@ public class TagController implements Initializable {
         try {
             result = csvFile.readCsvFile(filePath, COMMA_DELIMITER);
         } catch (IOException e) {
-            System.out.printf("CSV Dosyası Okunurken Bir Hata Oluştu: " + e.getMessage());;
+            System.out.printf("CSV Dosyası Okunurken Bir Hata Oluştu: " + e.getMessage());
         }
 
         if (result != null) {

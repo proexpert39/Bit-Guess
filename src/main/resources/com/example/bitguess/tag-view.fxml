@@ -11,6 +11,7 @@
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.example.bitguess.TagController"
       spacing="16"
+      fx:id="root"
 >
     <padding>
         <Insets topRightBottomLeft="20" />
