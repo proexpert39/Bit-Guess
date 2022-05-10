@@ -143,7 +143,6 @@ public class TagController implements Initializable {
         lvNegativeTweets.setItems(negativeTweetObservableList);
         lvIrrelevantTweets.setItems(irrelevantTweetObservableList);
 
-        System.out.println("HERE");
     }
 
     private void updateTagCountLabels() {

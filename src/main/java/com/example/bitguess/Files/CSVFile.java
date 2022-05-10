@@ -29,33 +29,7 @@ public class CSVFile {
     }
 
     public List<List<String>> readCsvFile(String filePath, String columnSeparator) throws IOException {
-        try {
-            return getLines(filePath, columnSeparator, StandardCharsets.UTF_8);
-        } catch (MalformedInputException malformedInputException) {
-            try {
-                return getLines(filePath, columnSeparator, StandardCharsets.ISO_8859_1);
-            } catch (MalformedInputException malformedInputException1) {
-                try {
-                    return getLines(filePath, columnSeparator, StandardCharsets.US_ASCII);
-                } catch (MalformedInputException malformedInputException2) {
-                    try {
-                        getLines(filePath, columnSeparator, StandardCharsets.UTF_16LE);
-                    } catch (MalformedInputException malformedInputException3) {
-                        try {
-                            getLines(filePath, columnSeparator, StandardCharsets.UTF_16);
-                        } catch (MalformedInputException malformedInputException4) {
-                            try {
-                                getLines(filePath, columnSeparator, StandardCharsets.UTF_16BE);
-                            } catch (MalformedInputException malformedInputException5) {
-                                System.out.println("Bilinmiyen Endoing...");
-                                return null;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return null;
+        return getLines(filePath, columnSeparator, Charset.forName("ISO8859_9"));
     }
 
     public void writeCsvFile(String pathName, String[] titleLine, DateTimeFormatter dateTimeFormatter, ObservableList<Tweet> notTagList,
@@ -63,7 +37,7 @@ public class CSVFile {
                              ObservableList<Tweet> irrelevantTagList) {
         File file = new File(pathName);
         try {
-            FileWriter output = new FileWriter(file);
+            FileWriter output = new FileWriter(file, Charset.forName("ISO8859_9"));
             CSVWriter write = new CSVWriter(output);
             write.writeNext(titleLine);
             writeDataLineToFile(write, notTagList, Sentiments.UNTAGGED, dateTimeFormatter);
