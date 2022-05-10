@@ -8,4 +8,6 @@ module com.example.bitguess {
 
     opens com.example.bitguess to javafx.fxml;
     exports com.example.bitguess;
+    exports com.example.bitguess.Controllers;
+    opens com.example.bitguess.Controllers to javafx.fxml;
 }

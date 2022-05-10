@@ -1,7 +1,9 @@
-package com.example.bitguess;
+package com.example.bitguess.Controllers;
 
 import com.example.bitguess.Files.CSVFile;
+import com.example.bitguess.Global;
 import com.example.bitguess.Models.Tweet;
+import com.example.bitguess.Sentiments;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
