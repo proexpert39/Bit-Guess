@@ -13,18 +13,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.format.FormatStyle;
 import java.util.*;
 
 public class TagController implements Initializable {
@@ -41,9 +36,6 @@ public class TagController implements Initializable {
     ObservableList<Tweet> irrelevantTweetObservableList = FXCollections.observableArrayList();
 
     @FXML
-    private AnchorPane root;
-
-    @FXML
     private Label lblUntaggedCount;
     @FXML
     private Label lblPositiveCount;
@@ -55,8 +47,6 @@ public class TagController implements Initializable {
     @FXML
     private Label lblIrrelevantCount;
 
-    @FXML
-    private Button btnSaveButton;
     @FXML
     private Button btnPositiveNegative;
 
@@ -77,12 +67,6 @@ public class TagController implements Initializable {
     private Button btnIrrelevantNegative;
     @FXML
     private Button btnIrrelevantEject;
-    @FXML
-    private Button btnPositive;
-    @FXML
-    private Button btnNegative;
-    @FXML
-    private Button btnIrrelevant;
 
     @FXML
     private ListView<Tweet> lvPositiveTweets;
@@ -115,14 +99,13 @@ public class TagController implements Initializable {
             for (List<String> line : result) {
                 if (line.size() > 2) {
                     switch (line.get(2).replace("\"", "")) {
-                        case "1":
+                        case Sentiments.POSITIVE:
                             addTweetList(positiveTweetObservableList, line);
                             break;
-                        case "-1":
+                        case Sentiments.NEGATIVE:
                             addTweetList(negativeTweetObservableList, line);
                             break;
-
-                        case "2":
+                        case Sentiments.IRRELEVANT:
                             addTweetList(irrelevantTweetObservableList, line);
                             break;
                         default:
