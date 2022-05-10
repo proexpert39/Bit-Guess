@@ -5,55 +5,56 @@
 <?import javafx.geometry.Insets?>
 <AnchorPane xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.example.bitguess.Controllers.TagController">
+      fx:controller="com.example.bitguess.Controllers.TagController"
+      stylesheets="@assets/style/button.css,@assets/style/font.css,@assets/style/label.css">
     <padding>
         <Insets topRightBottomLeft="10" />
     </padding>
-    <Label fx:id="lblUntaggedCount" style="-fx-font-weight: bold" AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" />
+    <Label fx:id="lblUntaggedCount" styleClass="fw-b,fs-16" AnchorPane.topAnchor="5.0" AnchorPane.leftAnchor="2.0" />
     <HBox AnchorPane.topAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" alignment="CENTER">
-        <Label fx:id="lblSelectedFilePath" style="-fx-font-weight: Bold;-fx-font-size:13px" />
+        <Label fx:id="lblSelectedFilePath" styleClass="fw-b,fs-14" />
     </HBox>
-    <ListView AnchorPane.topAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="230.0" fx:id="lvTweetText" />
+    <ListView AnchorPane.topAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="230.0" fx:id="lvTweetText" styleClass="fw-b,fs-20" />
     <VBox AnchorPane.topAnchor="30.0" AnchorPane.rightAnchor="0.0" prefWidth="200.0" spacing="32" alignment="CENTER">
         <HBox.margin>
             <Insets top="22" />
         </HBox.margin>
-        <Button onAction="#onActionChangeTagTweet" prefWidth="200" prefHeight="112.0" text="Olumlu" />
-        <Button onAction="#onActionChangeTagTweet" prefWidth="200" prefHeight="112.0" text="Olumsuz" />
-        <Button onAction="#onActionChangeTagTweet" prefWidth="200" prefHeight="112.0" text="Alakasız - Nötr" />
+        <Button fx:id="btnPositive" onAction="#onActionChangeTagTweet" prefWidth="200" prefHeight="112.0" text="Olumlu" styleClass="btn,btn-success,fs-16" />
+        <Button fx:id="btnNegative" onAction="#onActionChangeTagTweet" prefWidth="200" prefHeight="112.0" text="Olumsuz" styleClass="btn,btn-danger,fs-16" />
+        <Button fx:id="btnIrrelevant" onAction="#onActionChangeTagTweet" prefWidth="200" prefHeight="112.0" text="Alakasız - Nötr" styleClass="btn,btn-secondary,fs-16" />
     </VBox>
 
 
     <HBox AnchorPane.topAnchor="450.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" alignment="CENTER" spacing="16">
         <VBox spacing="8" alignment="CENTER" HBox.hgrow="ALWAYS">
             <AnchorPane >
-                <Label AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" style="-fx-font-weight: bold;" text="Pozitif" />
-                <Label AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" fx:id="lblPositiveCount" style="-fx-font-weight: bold;" />
+                <Label AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" styleClass="fw-b,fs-16,txt-fill-success" text="Pozitif" />
+                <Label AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" fx:id="lblPositiveCount" styleClass="fw-b,fs-16,txt-fill-success" />
             </AnchorPane>
-            <ListView  fx:id="lvPositiveTweets" />
-            <Button fx:id="btnPositiveNegative" onAction="#onActionChangeTagTweet" disable="true" text="Negatif" maxWidth="Infinity" />
-            <Button fx:id="btnPositiveIrrelevant" onAction="#onActionChangeTagTweet" disable="true" text="Alakasız - Nötr" maxWidth="Infinity" />
-            <Button fx:id="btnPositiveEject" onAction="#onActionChangeTagTweet" disable="true" text="Çıkar" maxWidth="Infinity" />
+            <ListView  fx:id="lvPositiveTweets" styleClass="fw-b,fs-16" />
+            <Button fx:id="btnPositiveNegative" onAction="#onActionChangeTagTweet" disable="true" text="Negatif" maxWidth="Infinity" styleClass="btn,btn-danger" />
+            <Button fx:id="btnPositiveIrrelevant" onAction="#onActionChangeTagTweet" disable="true" text="Alakasız - Nötr" maxWidth="Infinity" styleClass="btn,btn-secondary" />
+            <Button fx:id="btnPositiveEject" onAction="#onActionChangeTagTweet" disable="true" text="Çıkar" maxWidth="Infinity" styleClass="btn,btn-light" />
         </VBox>
         <VBox spacing="8" alignment="CENTER" HBox.hgrow="ALWAYS">
             <AnchorPane >
-                <Label AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" style="-fx-font-weight: bold;" text="Negatif" />
-                <Label AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" fx:id="lblNegativeCount" style="-fx-font-weight: bold;" />
+                <Label AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" styleClass="fw-b,fs-16,txt-fill-danger" text="Negatif" />
+                <Label AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" fx:id="lblNegativeCount" styleClass="fw-b,fs-16,txt-fill-danger" />
             </AnchorPane>
-            <ListView maxWidth="500.0" fx:id="lvNegativeTweets" />
-            <Button fx:id="btnNegativePositive" onAction="#onActionChangeTagTweet" disable="true" text="Pozitif" maxWidth="Infinity" />
-            <Button fx:id="btnNegativeIrrelevant" onAction="#onActionChangeTagTweet" disable="true" text="Alakasız - Nötr" maxWidth="Infinity" />
-            <Button fx:id="btnNegativeEject" onAction="#onActionChangeTagTweet" disable="true" text="Çıkar" maxWidth="Infinity" />
+            <ListView fx:id="lvNegativeTweets" styleClass="fw-b,fs-16" />
+            <Button fx:id="btnNegativePositive" onAction="#onActionChangeTagTweet" disable="true" text="Pozitif" maxWidth="Infinity" styleClass="btn,btn-success" />
+            <Button fx:id="btnNegativeIrrelevant" onAction="#onActionChangeTagTweet" disable="true" text="Alakasız - Nötr" maxWidth="Infinity" styleClass="btn,btn-secondary" />
+            <Button fx:id="btnNegativeEject" onAction="#onActionChangeTagTweet" disable="true" text="Çıkar" maxWidth="Infinity" styleClass="btn,btn-light" />
         </VBox>
         <VBox spacing="8" alignment="CENTER" HBox.hgrow="ALWAYS">
             <AnchorPane>
-                <Label AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" style="-fx-font-weight: bold;" text="Alakasız - Nötr" />
-                <Label AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" fx:id="lblIrrelevantCount" style="-fx-font-weight: bold;" />
+                <Label AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" styleClass="fw-b,fs-16" text="Alakasız - Nötr" />
+                <Label AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" fx:id="lblIrrelevantCount" styleClass="fw-b,fs-16" />
             </AnchorPane>
-            <ListView fx:id="lvIrrelevantTweets" />
-            <Button fx:id="btnIrrelevantPositive" onAction="#onActionChangeTagTweet" disable="true" text="Pozitif" maxWidth="Infinity" />
-            <Button fx:id="btnIrrelevantNegative" onAction="#onActionChangeTagTweet" disable="true" text="Negatif" maxWidth="Infinity" />
-            <Button fx:id="btnIrrelevantEject" onAction="#onActionChangeTagTweet" disable="true" text="Çıkar" maxWidth="Infinity" />
+            <ListView fx:id="lvIrrelevantTweets" styleClass="fw-b,fs-16" />
+            <Button fx:id="btnIrrelevantPositive" onAction="#onActionChangeTagTweet" disable="true" text="Pozitif" maxWidth="Infinity" styleClass="btn,btn-success" />
+            <Button fx:id="btnIrrelevantNegative" onAction="#onActionChangeTagTweet" disable="true" text="Negatif" maxWidth="Infinity" styleClass="btn,btn-danger" />
+            <Button fx:id="btnIrrelevantEject" onAction="#onActionChangeTagTweet" disable="true" text="Çıkar" maxWidth="Infinity" styleClass="btn,btn-light" />
         </VBox>
     </HBox>
 </AnchorPane>

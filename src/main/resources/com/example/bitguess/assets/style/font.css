@@ -1,0 +1,15 @@
+.fs-20 {
+    -fx-font-size: 20px;
+}
+
+.fs-16 {
+    -fx-font-size: 16px;
+}
+
+.fs-14 {
+    -fx-font-size: 14px;
+}
+
+.fw-b {
+    -fx-font-weight: Bold;
+}

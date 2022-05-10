@@ -1,0 +1,62 @@
+/* Button Type */
+
+.btn {
+    -fx-font-weight: Bold;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 6, 0, 1, 1);
+}
+
+/* Button Theme */
+
+.btn-danger {
+    -fx-background-color: #FF0000;
+    -fx-text-fill: #FFFFFF;
+}
+
+.btn-danger:hover {
+    -fx-background-color: #EE0000;
+}
+
+.btn-danger:pressed {
+    -fx-background-color: #DD0000;
+}
+
+.btn-success {
+    -fx-background-color: #33AA33;
+    -fx-text-fill: #FFFFFF;
+}
+
+.btn-success:hover {
+    -fx-background-color: #339933;
+}
+
+.btn-success:pressed {
+    -fx-background-color: #338833;
+}
+
+.btn-secondary {
+    -fx-background-color: #525252;
+    -fx-text-fill: #FFFFFF;
+}
+
+.btn-secondary:hover {
+    -fx-background-color: #474747;
+}
+
+.btn-secondary:pressed {
+    -fx-background-color: #424242;
+}
+
+.btn-light {
+    -fx-background-color: #FFFFFF;
+    -fx-text-fill: #318CE7;
+}
+
+.btn-light:hover {
+    -fx-background-color: #FAFAFA;
+}
+
+.btn-light:pressed {
+    -fx-background-color: #F5F5F5;
+}
+

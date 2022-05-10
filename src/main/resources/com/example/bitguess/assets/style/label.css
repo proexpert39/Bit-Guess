@@ -1,0 +1,7 @@
+.txt-fill-success {
+    -fx-text-fill: #339933;
+}
+
+.txt-fill-danger {
+    -fx-text-fill: #EE0000;
+}

@@ -30,7 +30,6 @@ public class TagController implements Initializable {
     private static final NumberFormat NUMBER_FORMAT = NumberFormat.getInstance(new Locale("tr_TR"));
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
-
     ObservableList<Tweet> tweetObservableList = FXCollections.observableArrayList();
     ObservableList<Tweet> positiveTweetObservableList = FXCollections.observableArrayList();
     ObservableList<Tweet> negativeTweetObservableList = FXCollections.observableArrayList();
@@ -52,6 +51,12 @@ public class TagController implements Initializable {
     @FXML
     private Button btnPositiveNegative;
 
+    @FXML
+    private Button btnPositive;
+    @FXML
+    private Button btnNegative;
+    @FXML
+    private Button btnIrrelevant;
     @FXML
     private Button btnPositiveIrrelevant;
     @FXML
@@ -148,7 +153,7 @@ public class TagController implements Initializable {
     }
 
     private void updateTagCountLabels() {
-        lblUntaggedCount.setText(NUMBER_FORMAT.format(tweetObservableList.size()));
+        lblUntaggedCount.setText("Kalan: " + NUMBER_FORMAT.format(tweetObservableList.size()));
         lblPositiveCount.setText(NUMBER_FORMAT.format(positiveTweetObservableList.size()));
         lblNegativeCount.setText(NUMBER_FORMAT.format(negativeTweetObservableList.size()));
         lblIrrelevantCount.setText(NUMBER_FORMAT.format(irrelevantTweetObservableList.size()));
