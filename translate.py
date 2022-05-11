@@ -40,8 +40,7 @@ with open("tweets/bitcoin_tweets_turkish.csv", "r",encoding="utf-8") as csvfile:
                         turkish_text = translator.translate(tweet_text,dest="tr").text.replace("\r","").replace("\n","")
                         if(turkish_text):
                             data = [row.date,turkish_text]
-                            print(data)
-                            #writer.writerow(data)
+                            writer.writerow(data)
                     else:
                         continue
                     #tweet_date = dateutil.parser.parse(row.date)
