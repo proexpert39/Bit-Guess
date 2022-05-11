@@ -18,34 +18,38 @@ def valid_date(s):
         #raise argparse.ArgumentTypeError(msg)
     return False
 
-translator = Translator()
-# open the file in the write mode
-f = open('tweets/Bitcoin_tweets.csv', 'a',newline="")
-writer = csv.writer(f)
-header = ["date","text"]
-writer.writerow(header)
+loopCounter = 2
+
+while(loopCounter):
+    print("["+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+"] - " + str(loopCounter))
+    translator = Translator()
+    # open the file in the write mode
+    f = open('tweets_turkish/Bitcoin_tweets_'+str(loopCounter)+'.csv', 'w',newline="")
+    writer = csv.writer(f)
+    header = ["date","text"]
+    writer.writerow(header)
 
 
-column_names = ["date","text"]
-with open("tweets/bitcoin_tweets_turkish.csv", "r",encoding="utf-8") as csvfile:
-    df = read_csv(csvfile,encoding="utf-8",engine='python',usecols=column_names,sep=",",quoting=3)
-    for index, row in df.iterrows():
-        try:
-            if(row.date and type(row.date)==str and row.text and type(row.date)==str):
-                if(dateutil.parser.parse(row.date)):
-                    tweet_date = dateutil.parser.parse(row.date)
-                    tweet_date = tweet_date.strftime("%Y-%m-%d %H:%M:%S")
-                    if(valid_date(tweet_date)):
-                        tweet_text = re.sub(r'[^A-Za-z0-9ğüşıöçĞÜŞİÖÇ]+', ' ', row.text.strip())
-                        turkish_text = translator.translate(tweet_text,dest="tr").text.replace("\r","").replace("\n","")
-                        if(turkish_text):
-                            data = [row.date,turkish_text]
-                            writer.writerow(data)
-                    else:
-                        continue
-                    #tweet_date = dateutil.parser.parse(row.date)
-                    #tweet_date = tweet_date.strftime("%Y-%m-%d %H:%M:%S")
-        except Exception as e:
-            continue
-f.close()
-
+    column_names = ["date","text"]
+    with open("tweets/Bitcoin_tweets_"+str(loopCounter)+".csv", "r",encoding="utf-8") as csvfile:
+        df = read_csv(csvfile,encoding="utf-8",engine='python',usecols=column_names,sep=",",quoting=3)
+        for index, row in df.iterrows():
+            try:
+                if(row.date and type(row.date)==str and row.text and type(row.date)==str):
+                    if(dateutil.parser.parse(row.date)):
+                        tweet_date = dateutil.parser.parse(row.date)
+                        tweet_date = tweet_date.strftime("%Y-%m-%d %H:%M:%S")
+                        if(valid_date(tweet_date)):
+                            tweet_text = re.sub(r'[^A-Za-z0-9ğüşıöçĞÜŞİÖÇ]+', ' ', row.text.strip())
+                            turkish_text = translator.translate(tweet_text,dest="tr").text.replace("\r","").replace("\n","")
+                            if(turkish_text):
+                                data = [row.date,turkish_text]
+                                writer.writerow(data)
+                        else:
+                            continue
+                        #tweet_date = dateutil.parser.parse(row.date)
+                        #tweet_date = tweet_date.strftime("%Y-%m-%d %H:%M:%S")
+            except Exception as e:
+                continue
+    f.close()
+    loopCounter+=1
